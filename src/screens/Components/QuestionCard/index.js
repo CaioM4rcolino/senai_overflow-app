@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, CardHeader, ImageProfile, HeaderContent, TextPostOwner, PostDate, CardBody, QuestionImage, TextDescription, TextTitle, CardFooter, ContainerInputAnswer,
 InputAnswer,  
 SendIcon,
@@ -6,36 +6,58 @@ ContainerAnswer} from './styles';
 import Image from "../../../../assets/foto_perfil.png";
 import Doubt from "../../../../assets/doubt.png";
 import colors from '../../../styles/colors';
+import { FlatList, TouchableOpacity } from 'react-native';
 
-export default function QuestionCard(){
+export default function QuestionCard({question}){
+
+    const [displayAnswers, setDisplayAnswers] = useState(false)
+
     return(
         <Container>
             <CardHeader>
-                <ImageProfile source={Image}/>
+                <ImageProfile source={
+                    question.Student.photo ? 
+                    {uri: question.Student.photo}
+                    : Image
+                }/>
                 <HeaderContent>
                     <TextPostOwner>
-                        Por Fulano
+                        {question.Student.name}
                     </TextPostOwner>
                     <PostDate>
-                        em 03/03/2021 às 15:02
+                        {question.createdAt}
                     </PostDate>
                 </HeaderContent>
             </CardHeader>
             <CardBody>
                 <TextTitle>
-                O que é JAVASCRIPT???
+                {question.title}
                 </TextTitle>
                 <TextDescription>
-                EIS A QUESTÃO
+                {question.description}
                 </TextDescription>
-                <QuestionImage source={Doubt}/>
+                {question.photo && (
+                    <QuestionImage source={{uri: question.photo}}/>
+                )} 
+               
             </CardBody>
             <CardFooter>
-                <TextPostOwner>
-                    Seja o primeiro a responder
-                </TextPostOwner>
-                <AnswerCard/>
-                <AnswerCard/>
+
+                <TouchableOpacity onPress={() => setDisplayAnswers(!displayAnswers)}>
+                    <TextPostOwner>
+                    {question.Answers.length === 0 ? "Seja o primeiro a responder" : `${question.Answers.length} respostas`}
+                    </TextPostOwner>
+                </TouchableOpacity>
+                
+                {displayAnswers && question.Answers.length > 0 && (
+                    <FlatList
+                        
+                        data={question.Answers}
+                        keyExtractor={(answer) => String(answer.id)}
+                        renderItem={({item: answer}) => <AnswerCard answer={answer}/>}
+                        
+                    />
+                )}
                 <ContainerInputAnswer>
                     <InputAnswer placeholder="Responda essa dúvida!" placeholderTextColor={colors.lightTransparent}/>
                     <SendIcon name="paper-plane"/>
@@ -46,25 +68,29 @@ export default function QuestionCard(){
 }
 
 
-function AnswerCard(){
+function AnswerCard({answer}){
 
     return(
 
         <ContainerAnswer>
             <CardHeader>
-            <ImageProfile source={Image}/>
+            <ImageProfile source={
+                    answer.Student.photo ? 
+                    {uri: answer.Student.photo}
+                    : Image
+                }/>
                 <HeaderContent>
                     <TextPostOwner>
-                        Por Ciclano
+                        {answer.Student.name}
                     </TextPostOwner>
                     <PostDate>
-                        em 04/03/2021 às 21:12
+                        {answer.created_at}
                     </PostDate>
                 </HeaderContent>
             </CardHeader>
             <CardBody>
                 <TextDescription>
-                    linguagem
+                    {answer.description}
                 </TextDescription>
             </CardBody>
         </ContainerAnswer>
