@@ -1,14 +1,15 @@
 import styled from "styled-components/native";
 import colors from "../../styles/colors.js";
-import {StatusBar} from "react-native";
 import { TextDefault } from "../../styles/stylesGlobal.js";
-import Icon from "react-native-vector-icons/FontAwesome";
+import {StatusBar} from "react-native";
+
 
 export const Container = styled.View`
     flex: 1;
     align-items: center;
     padding-top: ${StatusBar.currentHeight}px;
     background-color: ${colors.dark};
+
 `;
 
 export const Toolbar = styled.View`
@@ -22,6 +23,7 @@ export const Toolbar = styled.View`
     background-color: ${colors.primary};
 `; 
 
+
 export const TextToolbar = styled(TextDefault)`
 
     font-size: 20px;
@@ -33,9 +35,30 @@ export const TextToolbar = styled(TextDefault)`
 
 `;
 
-export const LogoutIcon = styled(Icon)`
-    position: absolute;
-    font-size: 50px;
-    right: 4px;
+export const Content = styled.View`
+
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+
+`;
+
+export const TextInputLogin = styled.TextInput`
+
+    width: 96%;
     color: ${colors.light};
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 20px;
+    background-color: ${colors.darkGray};
+
+`;
+
+export const Label = styled(TextDefault)`
+    font-weight: bold;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
 `;
