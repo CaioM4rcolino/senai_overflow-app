@@ -5,6 +5,7 @@ import colors from '../../styles/colors';
 import QuestionCard from '../Components/QuestionCard';
 import { api } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
+import { signOut } from '../../services/security';
 
 export default function Home(){
 
@@ -45,12 +46,20 @@ export default function Home(){
     StatusBar.setBackgroundColor(colors.primary);
     const navigation = useNavigation();
 
+    const handleLogout = () =>{
+        signOut();
+        navigation.navigate("Login");
+    }
     
     return(
         <Container>
             <Toolbar>
                <TextToolbar>Senai Overflow</TextToolbar>
-               <LogoutIcon onPress={() => navigation.navigate("Login")} name="sign-out"/>
+               <LogoutIcon 
+               onPress={handleLogout} 
+               name="sign-out"
+               />
+               
             </Toolbar>
             <FlatList
                 data={questions}

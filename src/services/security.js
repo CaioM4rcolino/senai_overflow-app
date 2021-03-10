@@ -1,48 +1,49 @@
 import { api } from "./api";
-import jwtDecode from "jwt-decode";
+// import jwtDecode from "jwt-decode";
+import AsyncStorage from "@react-native-community/async-storage"
 
 const USER_KEY = "@user";
 
 export const signIn = (user) => {
 
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
     api.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
 
 };
 
 export const signOut = () => {
-    localStorage.removeItem(USER_KEY);
+    AsyncStorage.removeItem(USER_KEY);
     api.defaults.headers.common["Authorization"] = undefined;
 
 }
 
-export const getUser = () => {
-    const {student} = JSON.parse(localStorage.getItem(USER_KEY));
+export const getUser = async () => {
+    const {student} = JSON.parse(await AsyncStorage.getItem(USER_KEY));
 
     return student;
 }
 
-export const setUser = (student) => {
-    const user = JSON.parse(localStorage.getItem(USER_KEY))
+export const setUser = async (student) => {
+    const user = JSON.parse(await AsyncStorage.getItem(USER_KEY))
 
     user.student = student;
 
-    localStorage.setItem(USER_KEY, JSON.stringify(user))
+    AsyncStorage.setItem(USER_KEY, JSON.stringify(user))
 }
 
-export const isSignedIn = () => {
-    const user = JSON.parse(localStorage.getItem(USER_KEY))
+export const isSignedIn = async () => {
+    const user = JSON.parse(await AsyncStorage.getItem(USER_KEY))
 
     if(user && user.token){
         
-        const jwtDecoded = jwtDecode(user.token);
-        console.log(jwtDecoded)
+        // const jwtDecoded = jwtDecode(user.token);
+        // console.log(jwtDecoded)
 
-        const currentTime = (Date.now() / 1000) | 0;
+        // const currentTime = (Date.now() / 1000) | 0;
 
-        if(jwtDecoded.exp < currentTime){
-            return signOut();
-        }
+        // if(jwtDecoded.exp < currentTime){
+        //     return signOut();
+        // }
 
         api.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
         return true;
